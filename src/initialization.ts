@@ -1,8 +1,11 @@
 import {app} from "./app.js";
+import {prop} from "./property.js";
+import {drum} from "./drum.js";
+import {GlobalVars} from "./run.js";
 
 interface iInit {
     counterFPS: any;
-    textFPS: number;
+    // textFPS: number;
     buttonImages: string[];
     buttonStartTexture: any;
     initBtnStart: () => void;
@@ -14,7 +17,7 @@ interface iInit {
 
 export const init: iInit = {
     counterFPS: {},
-    textFPS: 0,
+    // textFPS: 0,
     buttonImages: ['images/start_red.jpg', 'images/start_green.png'],
     buttonStartTexture: [],
     btnStart: {},
@@ -25,8 +28,8 @@ export const init: iInit = {
             this.buttonStartTexture.push(texture);
         }
         this.btnStart = new PIXI.AnimatedSprite(this.buttonStartTexture);
-        this.btnStart.width = 100;
-        this.btnStart.height = 50;
+        this.btnStart.width = prop.btnStart.width;
+        this.btnStart.height = prop.btnStart.height;
         this.btnStart.anchor.set(0.5, 0);
         this.btnStart.animationSpeed = 0.05;
         this.btnStart.play();
@@ -37,7 +40,11 @@ export const init: iInit = {
     },
 
     clickOnStart() {
-        console.log('click')
+        drum.arrAllSprites.forEach(function (sprite) {
+            app.stage.removeChild(sprite);
+        });
+        drum.printIconsInStartPosition(prop.listSimbols);
+        GlobalVars.state = drum.run.bind(drum);
     },
 
     initFPS(): void {
