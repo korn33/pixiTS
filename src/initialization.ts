@@ -5,7 +5,6 @@ import {GlobalVars} from "./run.js";
 
 interface iInit {
     counterFPS: any;
-    // textFPS: number;
     buttonImages: string[];
     buttonStartTexture: any;
     initBtnStart: () => void;
@@ -13,14 +12,18 @@ interface iInit {
     initFPS: () => void;
     autoResizeApp: () => void;
     clickOnStart: () => void;
+    initBlackZones:()=> void;
+    retreatIcons:number
+    heightIcons:number
 }
 
 export const init: iInit = {
     counterFPS: {},
-    // textFPS: 0,
     buttonImages: ['images/start_red.jpg', 'images/start_green.png'],
     buttonStartTexture: [],
     btnStart: {},
+    heightIcons: prop.simbols.size,
+    retreatIcons: prop.simbols.size/2,
 
     initBtnStart(): void {
         for (let i = 0; i < this.buttonImages.length; i++) {
@@ -40,8 +43,10 @@ export const init: iInit = {
     },
 
     clickOnStart() {
+        drum.move = 'acceleration';
+        // console.log(drum.correctPositions);
         drum.arrAllSprites.forEach(function (sprite) {
-            app.stage.removeChild(sprite);
+            drum.drumContainer.removeChild(sprite);
         });
         drum.printIconsInStartPosition(prop.listSimbols);
         GlobalVars.state = drum.run.bind(drum);
@@ -56,6 +61,22 @@ export const init: iInit = {
         this.counterFPS = new PIXI.Text('', styleCounterFPS);
         app.stage.addChild(this.counterFPS);
         this.counterFPS.anchor.set(1);
+    },
+
+    initBlackZones(){
+        const upBlackRectangle = new PIXI.Graphics();
+        upBlackRectangle.beginFill(0x000000, 1);
+        upBlackRectangle.drawRect(0, prop.btnStart.height, window.innerWidth, 2*prop.simbols.size);
+        upBlackRectangle.endFill();
+        upBlackRectangle.zIndex = 1;
+        app.stage.addChild(upBlackRectangle);
+
+        const downBlackRectangle = new PIXI.Graphics();
+        downBlackRectangle.beginFill(0x000000, 1);
+        downBlackRectangle.drawRect(0, prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5, window.innerWidth, window.innerHeight-prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5);
+        downBlackRectangle.endFill();
+        downBlackRectangle.zIndex = 1;
+        app.stage.addChild(downBlackRectangle);
     },
 
     autoResizeApp() {
