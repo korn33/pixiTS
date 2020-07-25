@@ -27,7 +27,7 @@ export const rotation = {
                     break;
                 }
                 case 'constSpeed': {
-                    if ((that.currentMoment - startingMoment) / 1000 > timeOfRotate) {
+                    if ((that.currentMoment - startingMoment) / 1000 > timeOfRotate + index) {
                         // console.log((that.currentMoment - startingMoment) / 1000 > timeOfRotate);
                         drum.move = 'slowdown';
                         drum.timer = 0;

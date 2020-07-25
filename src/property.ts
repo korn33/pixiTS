@@ -12,7 +12,7 @@ interface iProp {
         maxSpeed: number
         acceleration: number
         reversAcceleration: number
-        restartTime: number
+        // restartTime: number
         maxTimeOfRotate: number
         minTimeOfRotate: number
     }
@@ -81,10 +81,10 @@ export const prop: iProp = {
     drum: {
         startSpeed: -1,
         minTimeOfRotate: 0,
-        maxTimeOfRotate: 2,
-        maxSpeed: -7,
+        maxTimeOfRotate: 1,
+        maxSpeed: -6,
         acceleration: 1,
-        reversAcceleration: 0.01,
-        restartTime: 1000,
+        reversAcceleration: 0.03,
+        // restartTime: 1000,
     }
 };

@@ -61,11 +61,10 @@ export const prop = {
     drum: {
         startSpeed: -1,
         minTimeOfRotate: 0,
-        maxTimeOfRotate: 2,
-        maxSpeed: -7,
+        maxTimeOfRotate: 1,
+        maxSpeed: -6,
         acceleration: 1,
-        reversAcceleration: 0.01,
-        restartTime: 1000,
+        reversAcceleration: 0.03,
     }
 };
 //# sourceMappingURL=property.js.map

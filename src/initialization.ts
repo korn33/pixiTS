@@ -52,7 +52,7 @@ export const init: iInit = {
 
         this.startingMoment = Date.now();
         // console.log('that.startingMoment: ', this.startingMoment);
-        this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate + 1 - prop.drum.minTimeOfRotate);
+        this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate - prop.drum.minTimeOfRotate);
         drums.forEach(function (drum, index) {
             drum.arrAllSprites.forEach(function (sprite: any) {
                 drum.drumContainer.removeChild(sprite);
