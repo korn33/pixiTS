@@ -57,23 +57,13 @@ export const prop = {
             "images/lens.png",
             "images/monkey.png"
         ],
-        [
-            "images/cat.png",
-            "images/car.png",
-            "images/blackberry.png",
-            "images/blue_house.png",
-            "images/horse.png",
-            "images/house.png",
-            "images/lens.png",
-            "images/monkey.png"
-        ],
     ],
     drum: {
         startSpeed: -1,
         minTimeOfRotate: 0,
         maxTimeOfRotate: 2,
-        maxSpeed: -6,
-        acceleration: 0.5,
+        maxSpeed: -7,
+        acceleration: 1,
         reversAcceleration: 0.01,
         restartTime: 1000,
     }

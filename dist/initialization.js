@@ -1,7 +1,7 @@
 import { app, drums } from "./app.js";
 import { prop } from "./property.js";
 // import {drum} from "./drum.js";
-import { GlobalVars } from "./run.js";
+import { GlobalVars, rotation } from "./run.js";
 export const init = {
     counterFPS: {},
     buttonImages: ['images/start_red.jpg', 'images/start_green.png'],
@@ -10,6 +10,7 @@ export const init = {
     heightIcons: prop.simbols.size,
     retreatIcons: prop.simbols.size / 2,
     timeOfRotate: 0,
+    startingMoment: 0,
     initBtnStart() {
         for (let i = 0; i < this.buttonImages.length; i++) {
             let texture = (PIXI.Texture.from(this.buttonImages[i]));
@@ -27,21 +28,18 @@ export const init = {
         this.btnStart.on('pointertap', this.clickOnStart);
     },
     clickOnStart() {
-        // drum.move = 'acceleration';
-        // drum.startingMoment = Date.now();
-        // this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate + 1 - prop.drum.minTimeOfRotate);
+        this.startingMoment = Date.now();
+        // console.log('that.startingMoment: ', this.startingMoment);
+        this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate + 1 - prop.drum.minTimeOfRotate);
         drums.forEach(function (drum, index) {
             drum.arrAllSprites.forEach(function (sprite) {
                 drum.drumContainer.removeChild(sprite);
             });
             drum.printIconsInStartPosition(prop.listSimbols[index]);
-            // drums.forEach(function (drum) {
-            //
-            // });
-            console.log(drum);
-            GlobalVars.state = drum.run.bind(drum);
+            drum.move = 'acceleration';
             // GlobalVars.state = drum.run.bind(drum, this.timeOfRotate);
         });
+        GlobalVars.state = rotation.run.bind(rotation, this.timeOfRotate, this.startingMoment);
     },
     initFPS() {
         const styleCounterFPS = new PIXI.TextStyle({
@@ -56,13 +54,13 @@ export const init = {
     },
     initBlackZones() {
         const upBlackRectangle = new PIXI.Graphics();
-        upBlackRectangle.beginFill(0x000000, 0.5);
+        upBlackRectangle.beginFill(0x000000, 0.8);
         upBlackRectangle.drawRect(0, prop.btnStart.height, window.innerWidth, 2 * prop.simbols.size);
         upBlackRectangle.endFill();
         upBlackRectangle.zIndex = 1;
         app.stage.addChild(upBlackRectangle);
         const downBlackRectangle = new PIXI.Graphics();
-        downBlackRectangle.beginFill(0x000000, 0.5);
+        downBlackRectangle.beginFill(0x000000, 0.8);
         downBlackRectangle.drawRect(0, prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5, window.innerWidth, window.innerHeight - prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5);
         downBlackRectangle.endFill();
         downBlackRectangle.zIndex = 1;

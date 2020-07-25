@@ -2,6 +2,7 @@ import { prop } from "./property.js";
 import { app } from "./app.js";
 import { init } from "./initialization.js";
 export class Drum {
+    // currentMoment: number;
     constructor(indexThisDrum) {
         this.indexThisDrum = indexThisDrum;
         this.arrAllSprites = [];
@@ -12,7 +13,7 @@ export class Drum {
         this.timer = 0;
         this.move = 'stop';
         this.startingMoment = 0;
-        this.currentMoment = 0;
+        // this.currentMoment = 0;
     }
     ;
     printIconsInStartPosition(arrAddress) {
@@ -45,7 +46,7 @@ export class Drum {
     ;
     run(timeOfRotate) {
         const that = this;
-        this.currentMoment = Date.now();
+        // this.currentMoment = Date.now();
         // switch (that.move) {
         //     case 'acceleration': {
         //         if (that.speed > prop.drum.maxSpeed) {
@@ -73,14 +74,14 @@ export class Drum {
         //         break;
         //     }
         // }
-        this.arrAllSprites.forEach(function (sprite, index) {
-            sprite.vy = that.speed;
-            sprite.y += sprite.vy;
-            if (sprite.y <= prop.btnStart.height + prop.simbols.size / 2) {
-                that.arrAllSprites.push(that.arrAllSprites.splice(0, 1)[0]);
-                sprite.y = prop.btnStart.height + prop.listSimbols.length * (prop.simbols.size + init.retreatIcons) + init.retreatIcons;
-            }
-        });
+        // this.arrAllSprites.forEach(function (sprite: any, index:number) {
+        //     sprite.vy = that.speed;
+        //     sprite.y += sprite.vy;
+        //     if (sprite.y <= prop.btnStart.height + prop.simbols.size / 2) {
+        //         that.arrAllSprites.push(that.arrAllSprites.splice(0, 1)[0]);
+        //         sprite.y = prop.btnStart.height + prop.listSimbols.length * (prop.simbols.size + init.retreatIcons) + init.retreatIcons;
+        //     }
+        // });
     }
 }
 //# sourceMappingURL=DrumClass.js.map
