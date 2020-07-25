@@ -33,17 +33,20 @@ export class Drum {
             that.arrAllSprites.push(new PIXI.Sprite(PIXI.Loader.shared.resources[addres].texture));
             that.arrAllSprites[index].width = prop.simbols.size;
             that.arrAllSprites[index].height = prop.simbols.size;
+            that.arrAllSprites[index].anchor.set(0, 0.5);
             that.arrAllSprites[index].x = (window.innerWidth / 2 - (prop.listSimbols.length * prop.simbols.size + 2 * init.retreatIcons) / 2) + that.indexThisDrum * (prop.simbols.size + 2 * init.retreatIcons);
-            that.arrAllSprites[index].y = prop.btnStart.height + prop.simbols.size + 1.5 * prop.simbols.size * (index + 1);
+            that.arrAllSprites[index].y = prop.btnStart.height + 1.5 * prop.simbols.size + 1.5 * prop.simbols.size * (index + 1);
             that.correctPositions.push(that.arrAllSprites[index].y);
             that.arrAllSprites[index].vy = 0;
             that.drumContainer.addChild(that.arrAllSprites[index]);
         });
+        // console.log(this.arrAllSprites)
     };
 
     initializationDrum(arrAddress: string[]) {
         this.printIconsInStartPosition(arrAddress);
         app.stage.addChild(this.drumContainer);
+        //console.log(this.arrAllSprites);
         // this.drumContainer.x = 0;
         const drumFrame = new PIXI.Graphics();
         drumFrame.lineStyle(1, 0xFF3300, 1);

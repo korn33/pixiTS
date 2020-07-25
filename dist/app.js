@@ -37,11 +37,11 @@ function setup() {
     init.initBlackZones();
     init.autoResizeApp();
     window.addEventListener('resize', init.autoResizeApp.bind(init));
-    GlobalVars.state = o.play;
+    GlobalVars.state = o.pausePlay;
     app.ticker.add(delta => o.gameLoop(delta));
 }
 export const o = {
-    play(delta) { },
+    pausePlay() { },
     gameLoop(delta) {
         init.counterFPS.text = PIXI.Ticker.shared.FPS;
         GlobalVars.state(delta);

@@ -18,6 +18,8 @@ interface iInit {
     heightIcons: number
     timeOfRotate: number
     startingMoment: number
+    begineGreenZone: number
+    centerGreenZone: number
 }
 
 export const init: iInit = {
@@ -29,6 +31,8 @@ export const init: iInit = {
     retreatIcons: prop.simbols.size / 2,
     timeOfRotate: 0,
     startingMoment: 0,
+    begineGreenZone: prop.btnStart.height + 3 * prop.simbols.size + 2 * (prop.simbols.size / 2),
+    centerGreenZone: (prop.btnStart.height + 3 * prop.simbols.size + 2 * (prop.simbols.size / 2) +  + 0.5 * prop.simbols.size),
 
     initBtnStart(): void {
         for (let i = 0; i < this.buttonImages.length; i++) {
@@ -45,6 +49,7 @@ export const init: iInit = {
         this.btnStart.interactive = true;
         this.btnStart.buttonMode = true;
         this.btnStart.on('pointertap', this.clickOnStart);
+        // console.log(this.centerGreenZone);
     },
 
     clickOnStart() {
@@ -54,10 +59,11 @@ export const init: iInit = {
         // console.log('that.startingMoment: ', this.startingMoment);
         this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate - prop.drum.minTimeOfRotate);
         drums.forEach(function (drum, index) {
-            drum.arrAllSprites.forEach(function (sprite: any) {
-                drum.drumContainer.removeChild(sprite);
+            drum.arrAllSprites.forEach(function (sprite: any, indexOfSprite: number) {
+                // drum.drumContainer.removeChild(sprite);
+                sprite.y = prop.btnStart.height + 1.5 * prop.simbols.size + 1.5 * prop.simbols.size * (indexOfSprite + 1);
             });
-            drum.printIconsInStartPosition(prop.listSimbols[index]);
+            // drum.printIconsInStartPosition(prop.listSimbols[index]);
             drum.move = 'acceleration';
 
 
@@ -95,6 +101,17 @@ export const init: iInit = {
         downBlackRectangle.endFill();
         downBlackRectangle.zIndex = 1;
         app.stage.addChild(downBlackRectangle);
+
+        const winningFrame = new PIXI.Graphics();
+        winningFrame.lineStyle(1, 0x3DFF00, 1);
+        winningFrame.beginFill(0x66CCFF, 0);
+        winningFrame.drawRect(drums[0].arrAllSprites[0].x - prop.simbols.size / 2,
+            this.begineGreenZone,
+            (prop.simbols.size + init.retreatIcons * 2) * drums.length,
+            prop.simbols.size);
+        winningFrame.endFill();
+        winningFrame.zIndex = 2;
+        app.stage.addChild(winningFrame);
     },
 
     autoResizeApp() {
