@@ -4,14 +4,14 @@ interface iProp {
         height: number
     }
     simbols: {
-        size:number
+        size: number
     }
-    listSimbols:string[]
-    drum:{
+    listSimbols: string[][]
+    drum: {
         startSpeed: number
         maxSpeed: number
         acceleration: number
-        reversAcceleration:number
+        reversAcceleration: number
         restartTime: number
         maxTimeOfRotate: number
         minTimeOfRotate: number
@@ -27,16 +27,68 @@ export const prop: iProp = {
         size: 30,
     },
     listSimbols: [
-        "images/cat.png",
-        "images/car.png",
-        "images/blackberry.png",
-        "images/blue_house.png",//минимально допустимое количество символов = 4
-        "images/horse.png",
-        "images/house.png",
-        "images/lens.png",
-        "images/monkey.png"
-    ],
-    drum:{
+        [
+            "images/cat.png",
+            "images/car.png",
+            "images/blackberry.png",
+            "images/blue_house.png",//минимально допустимое количество символов = 4
+            "images/horse.png",
+            "images/house.png",
+            "images/lens.png",
+            "images/monkey.png"
+        ],
+        [
+            "images/cat.png",
+            "images/car.png",
+            "images/blackberry.png",
+            "images/blue_house.png",//минимально допустимое количество символов = 4
+            "images/horse.png",
+            "images/house.png",
+            "images/lens.png",
+            "images/monkey.png"
+        ],
+        [
+            "images/cat.png",
+            "images/car.png",
+            "images/blackberry.png",
+            "images/blue_house.png",//минимально допустимое количество символов = 4
+            "images/horse.png",
+            "images/house.png",
+            "images/lens.png",
+            "images/monkey.png"
+        ],
+        [
+            "images/cat.png",
+            "images/car.png",
+            "images/blackberry.png",
+            "images/blue_house.png",//минимально допустимое количество символов = 4
+            "images/horse.png",
+            "images/house.png",
+            "images/lens.png",
+            "images/monkey.png"
+        ],
+        [
+            "images/cat.png",
+            "images/car.png",
+            "images/blackberry.png",
+            "images/blue_house.png",//минимально допустимое количество символов = 4
+            "images/horse.png",
+            "images/house.png",
+            "images/lens.png",
+            "images/monkey.png"
+        ],
+        [
+            "images/cat.png",
+            "images/car.png",
+            "images/blackberry.png",
+            "images/blue_house.png",//минимально допустимое количество символов = 4
+            "images/horse.png",
+            "images/house.png",
+            "images/lens.png",
+            "images/monkey.png"
+        ],
+        ],
+    drum: {
         startSpeed: -1,
         minTimeOfRotate: 0,
         maxTimeOfRotate: 2,

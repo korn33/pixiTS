@@ -1,6 +1,6 @@
-import {app} from "./app.js";
+import {app, drums} from "./app.js";
 import {prop} from "./property.js";
-import {drum} from "./drum.js";
+// import {drum} from "./drum.js";
 import {GlobalVars} from "./run.js";
 
 interface iInit {
@@ -47,14 +47,24 @@ export const init: iInit = {
     },
 
     clickOnStart() {
-        drum.move = 'acceleration';
-        drum.startingMoment = Date.now();
-        this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate + 1 - prop.drum.minTimeOfRotate);
-        drum.arrAllSprites.forEach(function (sprite) {
-            drum.drumContainer.removeChild(sprite);
+        // drum.move = 'acceleration';
+        // drum.startingMoment = Date.now();
+        // this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate + 1 - prop.drum.minTimeOfRotate);
+        drums.forEach(function (drum, index) {
+            drum.arrAllSprites.forEach(function (sprite:any) {
+                drum.drumContainer.removeChild(sprite);
+            });
+            drum.printIconsInStartPosition(prop.listSimbols[index]);
+            // drums.forEach(function (drum) {
+            //
+            // });
+            console.log(drum);
+            GlobalVars.state = drum.run.bind(drum);
+            // GlobalVars.state = drum.run.bind(drum, this.timeOfRotate);
         });
-        drum.printIconsInStartPosition(prop.listSimbols);
-        GlobalVars.state = drum.run.bind(drum, this.timeOfRotate);
+
+
+
     },
 
     initFPS(): void {

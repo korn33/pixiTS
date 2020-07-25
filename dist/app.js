@@ -1,7 +1,8 @@
 import { init } from "./initialization.js";
 import { prop } from "./property.js";
-import { drum } from "./drum.js";
+// import {drum} from "./drum.js";
 import { GlobalVars } from "./run.js";
+import { Drum } from "./DrumClass.js";
 export const app = new PIXI.Application();
 app.stage.sortableChildren = true;
 document.body.appendChild(app.view);
@@ -21,8 +22,16 @@ PIXI.Loader.shared
     "images/raspberry.png",
 ])
     .load(setup);
+export const drums = [];
 function setup() {
-    drum.initializationDrum(prop.listSimbols);
+    prop.listSimbols.forEach(function (elem, index) {
+        drums.push(new Drum(index));
+    });
+    drums.forEach(function (drum, index) {
+        drum.initializationDrum(prop.listSimbols[index]);
+    });
+    // console.log(drums);
+    //drums[0].initializationDrum(prop.listSimbols);
     init.initBtnStart();
     init.initFPS();
     init.initBlackZones();
