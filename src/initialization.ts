@@ -8,13 +8,14 @@ interface iInit {
     buttonImages: string[];
     buttonStartTexture: any;
     initBtnStart: () => void;
-    btnStart:any;
+    btnStart: any;
     initFPS: () => void;
     autoResizeApp: () => void;
     clickOnStart: () => void;
-    initBlackZones:()=> void;
-    retreatIcons:number
-    heightIcons:number
+    initBlackZones: () => void;
+    retreatIcons: number
+    heightIcons: number
+    timeOfRotate: number
 }
 
 export const init: iInit = {
@@ -23,7 +24,10 @@ export const init: iInit = {
     buttonStartTexture: [],
     btnStart: {},
     heightIcons: prop.simbols.size,
-    retreatIcons: prop.simbols.size/2,
+    retreatIcons: prop.simbols.size / 2,
+    timeOfRotate: 0,
+
+
 
     initBtnStart(): void {
         for (let i = 0; i < this.buttonImages.length; i++) {
@@ -44,12 +48,13 @@ export const init: iInit = {
 
     clickOnStart() {
         drum.move = 'acceleration';
-        // console.log(drum.correctPositions);
+        drum.startingMoment = Date.now();
+        this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate + 1 - prop.drum.minTimeOfRotate);
         drum.arrAllSprites.forEach(function (sprite) {
             drum.drumContainer.removeChild(sprite);
         });
         drum.printIconsInStartPosition(prop.listSimbols);
-        GlobalVars.state = drum.run.bind(drum);
+        GlobalVars.state = drum.run.bind(drum, this.timeOfRotate);
     },
 
     initFPS(): void {
@@ -59,21 +64,22 @@ export const init: iInit = {
             fill: "white",
         });
         this.counterFPS = new PIXI.Text('', styleCounterFPS);
-        app.stage.addChild(this.counterFPS);
         this.counterFPS.anchor.set(1);
+        this.counterFPS.zIndex = 2;
+        app.stage.addChild(this.counterFPS);
     },
 
-    initBlackZones(){
+    initBlackZones() {
         const upBlackRectangle = new PIXI.Graphics();
-        upBlackRectangle.beginFill(0x000000, 1);
-        upBlackRectangle.drawRect(0, prop.btnStart.height, window.innerWidth, 2*prop.simbols.size);
+        upBlackRectangle.beginFill(0x000000, 0.5);
+        upBlackRectangle.drawRect(0, prop.btnStart.height, window.innerWidth, 2 * prop.simbols.size);
         upBlackRectangle.endFill();
         upBlackRectangle.zIndex = 1;
         app.stage.addChild(upBlackRectangle);
 
         const downBlackRectangle = new PIXI.Graphics();
-        downBlackRectangle.beginFill(0x000000, 1);
-        downBlackRectangle.drawRect(0, prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5, window.innerWidth, window.innerHeight-prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5);
+        downBlackRectangle.beginFill(0x000000, 0.5);
+        downBlackRectangle.drawRect(0, prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5, window.innerWidth, window.innerHeight - prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5);
         downBlackRectangle.endFill();
         downBlackRectangle.zIndex = 1;
         app.stage.addChild(downBlackRectangle);

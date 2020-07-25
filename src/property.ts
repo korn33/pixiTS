@@ -4,19 +4,17 @@ interface iProp {
         height: number
     }
     simbols: {
-        // width: number,
         size:number
-        // retreat: number,
     }
     listSimbols:string[]
     drum:{
         startSpeed: number
-        timeOfRotate: number
         maxSpeed: number
         acceleration: number
         reversAcceleration:number
         restartTime: number
-
+        maxTimeOfRotate: number
+        minTimeOfRotate: number
     }
 }
 
@@ -27,13 +25,12 @@ export const prop: iProp = {
     },
     simbols: {
         size: 30,
-        // retreat: 30,
     },
     listSimbols: [
         "images/cat.png",
         "images/car.png",
         "images/blackberry.png",
-        "images/blue_house.png",
+        "images/blue_house.png",//минимально допустимое количество символов = 4
         "images/horse.png",
         "images/house.png",
         "images/lens.png",
@@ -41,10 +38,11 @@ export const prop: iProp = {
     ],
     drum:{
         startSpeed: -1,
-        timeOfRotate: 10000,
-        maxSpeed: -8,
-        acceleration: 0.005,
-        reversAcceleration: 0.001,
+        minTimeOfRotate: 0,
+        maxTimeOfRotate: 2,
+        maxSpeed: -6,
+        acceleration: 0.5,
+        reversAcceleration: 0.01,
         restartTime: 1000,
     }
 };

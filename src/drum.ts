@@ -7,12 +7,14 @@ interface iDrum {
     arrAllSprites: any[]
     printIconsInStartPosition: ([]) => void
     initializationDrum: ([]) => void
-    run: () => void
+    run: (timeOfRotate:number) => void
     startPoint: number
     speed: number
     timer: number
     move: 'acceleration' | 'constSpeed' | 'slowdown' | 'stop'
     correctPositions: number[]
+    startingMoment: number
+    currentMoment: number
 }
 
 export const drum: iDrum = {
@@ -44,7 +46,7 @@ export const drum: iDrum = {
         const drumFrame = new PIXI.Graphics();
         drumFrame.lineStyle(1, 0xFF3300, 1);
         drumFrame.beginFill(0x66CCFF, 0);
-        drumFrame.drawRect(window.innerWidth / 2 - prop.simbols.size/2, prop.btnStart.height + 2 * prop.simbols.size, prop.simbols.size + init.retreatIcons * 2, prop.simbols.size * 3 + init.retreatIcons * 3 - 1);
+        drumFrame.drawRect(window.innerWidth / 2 - prop.simbols.size / 2, prop.btnStart.height + 2 * prop.simbols.size, prop.simbols.size + init.retreatIcons * 2, prop.simbols.size * 3 + init.retreatIcons * 3 - 1);
         drumFrame.endFill();
         drumFrame.zIndex = 1;
         app.stage.addChild(drumFrame);
@@ -53,66 +55,49 @@ export const drum: iDrum = {
     speed: prop.drum.startSpeed,
     timer: 0,
     move: 'stop',
+    startingMoment: 0,
+    currentMoment: 0,
 
-    run() {
+    run(timeOfRotate) {
         const that: any = this;
-
-        app.ticker.add(function (delta: number) {
-            switch (that.move) {
-                case 'acceleration': {
-                    if (that.speed > prop.drum.maxSpeed) {
-                        that.speed -= prop.drum.acceleration * delta;
-                    } else {
-                        that.move = 'constSpeed';
-                        that.speed = prop.drum.maxSpeed;
-                    }
-                    break;
+        this.currentMoment = Date.now();
+        switch (that.move) {
+            case 'acceleration': {
+                if (that.speed > prop.drum.maxSpeed) {
+                    that.speed -= prop.drum.acceleration * (this.currentMoment - this.startingMoment) / 1000;
+                } else {
+                    that.move = 'constSpeed';
+                    that.speed = prop.drum.maxSpeed;
                 }
-                case 'constSpeed': {
-                    if (that.timer < prop.drum.timeOfRotate) {
-                        that.timer += delta;
-                    } else {
-                        that.move = 'slowdown';
-                        that.timer = 0;
-                    }
-                    break;
-                }
-                case 'slowdown': {
-                    if (that.speed < 0) {
-                        that.speed += prop.drum.reversAcceleration * delta;
-                        // if (that.speed > -0.01) {
-                        //
-                        //     that.arrAllSprites.forEach((icon:any, index: number) => {
-                        //         icon.y = that.correctPositions[index-1];
-                        //     });
-                        // }
-                    } else {
-                        that.speed = 0;
-                        that.move = 'stop';
-
-                        // that.arrAllSprites.forEach((icon:any, index: number) => {
-                        //     icon.y = that.correctPositions[index-1];
-                        // });
-                        // that.arrAllSprites.forEach((i:any)=>console.log(i.y));
-
-                        // console.log(that.arrAllSprites[0]);
-                        // setTimeout(()=>{
-                        //     window.location.reload(false);
-                        // }, prop.drum.restartTime)
-
-                    }
-                    break;
-                }
+                break;
             }
-        }, that);
+            case 'constSpeed': {
+                if ((this.currentMoment - this.startingMoment) / 1000 > timeOfRotate) {
+                    that.move = 'slowdown';
+                    that.timer = 0;
+                }
+                break;
+            }
+            case 'slowdown': {
+                if (that.speed < 0) {
+                    that.speed += prop.drum.reversAcceleration * (this.currentMoment - this.startingMoment) / 1000;
+                } else {
+                    that.speed = 0;
+                    that.move = 'stop';
+                }
+                break;
+            }
+        }
 
-
-        this.arrAllSprites.forEach(function (sprite: any) {
+        this.arrAllSprites.forEach(function (sprite: any, index:number) {
             sprite.vy = that.speed;
             sprite.y += sprite.vy;
             if (sprite.y <= prop.btnStart.height + prop.simbols.size / 2) {
-                // that.arrAllSprites.push(that.arrAllSprites.splice(0, 1)[0]);
-                sprite.y = prop.btnStart.height + 6.5 * prop.simbols.size
+                that.arrAllSprites.push(that.arrAllSprites.splice(0, 1)[0]);
+                sprite.y = prop.btnStart.height + prop.listSimbols.length * (prop.simbols.size + init.retreatIcons) + init.retreatIcons;
+                // if (sprite.texture.textureCacheIds[0] === prop.listSimbols[0]) {
+                //     sprite.y = prop.btnStart.height + 2 * prop.simbols.size + prop.simbols.size * 3 + init.retreatIcons * 3;
+                // }
             }
         });
     }

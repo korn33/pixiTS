@@ -9,6 +9,7 @@ export const init = {
     btnStart: {},
     heightIcons: prop.simbols.size,
     retreatIcons: prop.simbols.size / 2,
+    timeOfRotate: 0,
     initBtnStart() {
         for (let i = 0; i < this.buttonImages.length; i++) {
             let texture = (PIXI.Texture.from(this.buttonImages[i]));
@@ -27,12 +28,13 @@ export const init = {
     },
     clickOnStart() {
         drum.move = 'acceleration';
-        // console.log(drum.correctPositions);
+        drum.startingMoment = Date.now();
+        this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate + 1 - prop.drum.minTimeOfRotate);
         drum.arrAllSprites.forEach(function (sprite) {
             drum.drumContainer.removeChild(sprite);
         });
         drum.printIconsInStartPosition(prop.listSimbols);
-        GlobalVars.state = drum.run.bind(drum);
+        GlobalVars.state = drum.run.bind(drum, this.timeOfRotate);
     },
     initFPS() {
         const styleCounterFPS = new PIXI.TextStyle({
@@ -41,18 +43,19 @@ export const init = {
             fill: "white",
         });
         this.counterFPS = new PIXI.Text('', styleCounterFPS);
-        app.stage.addChild(this.counterFPS);
         this.counterFPS.anchor.set(1);
+        this.counterFPS.zIndex = 2;
+        app.stage.addChild(this.counterFPS);
     },
     initBlackZones() {
         const upBlackRectangle = new PIXI.Graphics();
-        upBlackRectangle.beginFill(0x000000, 1);
+        upBlackRectangle.beginFill(0x000000, 0.5);
         upBlackRectangle.drawRect(0, prop.btnStart.height, window.innerWidth, 2 * prop.simbols.size);
         upBlackRectangle.endFill();
         upBlackRectangle.zIndex = 1;
         app.stage.addChild(upBlackRectangle);
         const downBlackRectangle = new PIXI.Graphics();
-        downBlackRectangle.beginFill(0x000000, 1);
+        downBlackRectangle.beginFill(0x000000, 0.5);
         downBlackRectangle.drawRect(0, prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5, window.innerWidth, window.innerHeight - prop.btnStart.height + prop.simbols.size * 4 + this.retreatIcons * 5);
         downBlackRectangle.endFill();
         downBlackRectangle.zIndex = 1;

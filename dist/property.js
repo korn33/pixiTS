@@ -18,10 +18,11 @@ export const prop = {
     ],
     drum: {
         startSpeed: -1,
-        timeOfRotate: 10000,
-        maxSpeed: -8,
-        acceleration: 0.005,
-        reversAcceleration: 0.001,
+        minTimeOfRotate: 0,
+        maxTimeOfRotate: 2,
+        maxSpeed: -6,
+        acceleration: 0.5,
+        reversAcceleration: 0.01,
         restartTime: 1000,
     }
 };
