@@ -162,7 +162,7 @@ export const rotation: iRotation = {
             if (this.winningSymbols.every(icon => icon.texture === firstSimbol)) {
                 init.endGameMessage.text = 'Вы выиграли!';
             } else {
-                init.endGameMessage.text = `Вам не повезло( 
+                init.endGameMessage.text = `Вы не выиграли 
 Попробуйте еще раз`;
             }
             GlobalVars.state = updatingFunctions.pausePlay;
