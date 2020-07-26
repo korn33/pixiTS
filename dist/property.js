@@ -1,3 +1,15 @@
+const simbolsOfDrum = {
+    simbolsForOneDrum: [
+        "images/cat.png",
+        "images/car.png",
+        "images/blackberry.png",
+        "images/blue_house.png",
+        "images/horse.png",
+        "images/house.png",
+        "images/lens.png",
+        "images/monkey.png"
+    ],
+};
 export const prop = {
     btnStart: {
         width: 100,
@@ -7,56 +19,16 @@ export const prop = {
         size: 30,
     },
     listSimbols: [
+        simbolsOfDrum.simbolsForOneDrum,
         [
             "images/cat.png",
             "images/car.png",
             "images/blackberry.png",
             "images/blue_house.png",
-            "images/horse.png",
-            "images/house.png",
-            "images/lens.png",
-            "images/monkey.png"
         ],
-        [
-            "images/cat.png",
-            "images/car.png",
-            "images/blackberry.png",
-            "images/blue_house.png",
-            "images/horse.png",
-            "images/house.png",
-            "images/lens.png",
-            "images/monkey.png"
-        ],
-        [
-            "images/cat.png",
-            "images/car.png",
-            "images/blackberry.png",
-            "images/blue_house.png",
-            "images/horse.png",
-            "images/house.png",
-            "images/lens.png",
-            "images/monkey.png"
-        ],
-        [
-            "images/cat.png",
-            "images/car.png",
-            "images/blackberry.png",
-            "images/blue_house.png",
-            "images/horse.png",
-            "images/house.png",
-            "images/lens.png",
-            "images/monkey.png"
-        ],
-        [
-            "images/cat.png",
-            "images/car.png",
-            "images/blackberry.png",
-            "images/blue_house.png",
-            "images/horse.png",
-            "images/house.png",
-            "images/lens.png",
-            "images/monkey.png"
-        ],
+        simbolsOfDrum.simbolsForOneDrum.concat(["images/start_red.png"]),
+        simbolsOfDrum.simbolsForOneDrum,
+        simbolsOfDrum.simbolsForOneDrum,
     ],
     drum: {
         startSpeed: -1,

@@ -1,6 +1,5 @@
 import { init } from "./initialization.js";
 import { prop } from "./property.js";
-// import {drum} from "./drum.js";
 import { GlobalVars } from "./run.js";
 import { Drum } from "./DrumClass.js";
 export const app = new PIXI.Application();
@@ -8,7 +7,7 @@ app.stage.sortableChildren = true;
 document.body.appendChild(app.view);
 PIXI.Loader.shared
     .add([
-    'images/start_red.jpg',
+    'images/start_red.png',
     'images/start_green.png',
     "images/cat.png",
     "images/car.png",
@@ -30,17 +29,15 @@ function setup() {
     drums.forEach(function (drum, index) {
         drum.initializationDrum(prop.listSimbols[index]);
     });
-    // console.log(drums);
-    //drums[0].initializationDrum(prop.listSimbols);
-    init.initBtnStart();
     init.initFPS();
-    init.initBlackZones();
+    init.initStaticZones();
+    init.initBtnStart();
     init.autoResizeApp();
     window.addEventListener('resize', init.autoResizeApp.bind(init));
-    GlobalVars.state = o.pausePlay;
-    app.ticker.add(delta => o.gameLoop(delta));
+    GlobalVars.state = updatingFunctions.pausePlay;
+    app.ticker.add(delta => updatingFunctions.gameLoop(delta));
 }
-export const o = {
+export const updatingFunctions = {
     pausePlay() { },
     gameLoop(delta) {
         init.counterFPS.text = PIXI.Ticker.shared.FPS;
