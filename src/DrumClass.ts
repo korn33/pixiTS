@@ -5,7 +5,6 @@ import {init} from "./initialization.js";
 export class Drum {
     drumContainer: any;
     arrAllSprites: any[];
-    startPoint: number;
     speed: number;
     timer: number;
     move: 'acceleration' | 'constSpeed' | 'slowdown' | 'stop';
@@ -14,7 +13,6 @@ export class Drum {
 
     constructor(public indexThisDrum:number) {
         this.arrAllSprites = [];
-        this.startPoint = prop.btnStart.height + 2.5 * prop.simbols.size;
         this.drumContainer = new PIXI.Container;
         this.correctPositions = [];
         this.speed = prop.drum.startSpeed;
@@ -23,7 +21,7 @@ export class Drum {
         this.startingMoment = 0;
     };
 
-    printIconsInStartPosition(arrAddress: string[]):void {
+    private printIconsInStartPosition(arrAddress: string[]):void {
         const that: any = this;
         const listSimbols: string[] = Array.from(arrAddress);
         listSimbols.forEach(function (addres: string, index: number):void {

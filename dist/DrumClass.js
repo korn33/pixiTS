@@ -5,7 +5,6 @@ export class Drum {
     constructor(indexThisDrum) {
         this.indexThisDrum = indexThisDrum;
         this.arrAllSprites = [];
-        this.startPoint = prop.btnStart.height + 2.5 * prop.simbols.size;
         this.drumContainer = new PIXI.Container;
         this.correctPositions = [];
         this.speed = prop.drum.startSpeed;

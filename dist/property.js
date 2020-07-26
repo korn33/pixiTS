@@ -1,5 +1,9 @@
-const simbolsOfDrum = {
-    simbolsForOneDrum: [
+export const allImgInApp = {
+    links: [
+        "images/new_icon.jpeg",
+        "images/start_red.png",
+        "images/start_green.png",
+        //иконки барабана начинаются с индекса 3
         "images/cat.png",
         "images/car.png",
         "images/blackberry.png",
@@ -19,16 +23,17 @@ export const prop = {
         size: 30,
     },
     listSimbols: [
-        simbolsOfDrum.simbolsForOneDrum,
+        allImgInApp.links.slice(3),
         [
             "images/cat.png",
             "images/car.png",
             "images/blackberry.png",
             "images/blue_house.png",
+            "images/horse.png",
         ],
-        simbolsOfDrum.simbolsForOneDrum.concat(["images/start_red.png"]),
-        simbolsOfDrum.simbolsForOneDrum,
-        simbolsOfDrum.simbolsForOneDrum,
+        allImgInApp.links.slice(3).concat(["images/new_icon.jpeg"]),
+        allImgInApp.links.slice(3),
+        allImgInApp.links.slice(3),
     ],
     drum: {
         startSpeed: -1,
@@ -38,6 +43,7 @@ export const prop = {
         acceleration: 1,
         reversAcceleration: 0.03,
         speedForCorrected: -2,
+        rotationalDelayFactor: 0.6,
     }
 };
 //# sourceMappingURL=property.js.map

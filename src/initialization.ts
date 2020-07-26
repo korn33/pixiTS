@@ -57,13 +57,16 @@ export const init: iInit = {
     clickOnStart() {
         init.endGameMessage.text = '';
         this.startingMoment = Date.now();
-        this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate - prop.drum.minTimeOfRotate);
+        this.timeOfRotate = prop.drum.minTimeOfRotate + Math.random() * (prop.drum.maxTimeOfRotate - prop.drum.minTimeOfRotate + 1);
         drums.forEach(function (drum) {
+            // при нажатии на кнопку вращение запускается со стартового положения иконок
             drum.arrAllSprites.forEach(function (sprite: any, indexOfSprite: number) {
                 sprite.y = prop.btnStart.height + 1.5 * prop.simbols.size + 1.5 * prop.simbols.size * (indexOfSprite + 1);
             });
+            //команда на ускорение
             drum.move = 'acceleration';
         });
+        //включение сцены вращения барабанов
         GlobalVars.state = rotation.run.bind(rotation, this.timeOfRotate, this.startingMoment);
     },
 
@@ -108,11 +111,11 @@ export const init: iInit = {
         this.winningFrame.zIndex = 2;
         app.stage.addChild(this.winningFrame);
 
-
         const styleEndGameMessage = new PIXI.TextStyle({
             fontFamily: "Arial",
             fontSize: 24,
             fill: "gold",
+            align: "center"
         });
         this.endGameMessage = new PIXI.Text('', styleEndGameMessage);
         this.endGameMessage.anchor.set(0.5, 0);

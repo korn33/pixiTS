@@ -25,8 +25,8 @@ export const rotation = {
                     break;
                 }
                 case 'constSpeed': {
-                    // для того чтобы гарантированно выиграть, можно удалить " + index" и сделать символы на барабанах одинаковыми
-                    if ((that.currentMoment - startingMoment) / 1000 > timeOfRotate + index) {
+                    // для того чтобы гарантированно выиграть, можно удалить " + index * prop.drum.rotationalDelayFactor" и сделать наполнение барабанов одинаковым
+                    if ((that.currentMoment - startingMoment) / 1000 > timeOfRotate + index * prop.drum.rotationalDelayFactor) {
                         drum.move = 'slowdown';
                         drum.timer = 0;
                     }
@@ -57,6 +57,7 @@ export const rotation = {
             GlobalVars.state = rotation.correctRun.bind(rotation);
         }
     },
+    //определение того, выше символ центра барабана, ниже или в центре
     getSign(value) {
         if (value > 0) {
             return 1;
@@ -72,6 +73,7 @@ export const rotation = {
         this.winningSymbols = [];
         this.winningSymbolsNumber = [];
         drums.forEach(function (drum) {
+            //создание массива из расстояний от каждого символа до центра барабана
             const arrDistance = [];
             drum.arrAllSprites.forEach(function (simbol) {
                 arrDistance.push({
@@ -79,6 +81,7 @@ export const rotation = {
                     numberSign: that.getSign((simbol.y - init.centerGreenZone))
                 });
             });
+            //нахождение индекса символа с наименьшей дистанцией
             let minDistance = {
                 distance: arrDistance[0].distance,
                 numberSign: arrDistance[0].numberSign
@@ -96,22 +99,26 @@ export const rotation = {
                     indexOfMinDistance.minDistance = elem.distance;
                 }
             });
+            //создаем массив из таких индексов ближайших символов (по одному символу на барабан)
             that.winningSymbolsNumber.push(indexOfMinDistance);
         });
+        //заполняем массив выигрыша объектами, содержашие данные о каждом выигрышном символе
         this.winningSymbolsNumber.forEach(function (simbolNumber, index) {
+            //индекс символа в массиве равен номеру его барабана
             drums[index].arrAllSprites.forEach(function (sprite, indexOfSprite) {
                 if (indexOfSprite === simbolNumber.index) {
                     that.winningSymbols.push({
                         texture: sprite._texture.textureCacheIds[0],
                         sprite: sprite,
                         numberSign: that.getSign((sprite.y - init.centerGreenZone)),
-                        indexDrum: index,
-                        minDistance: simbolNumber.minDistance,
-                        centerY: simbolNumber.minDistance + sprite.y
                     });
                 }
             });
         });
+        // Так как эта функция запускается постоянно, то свойство numberSign постоянно пересчитывается.
+        // Крутим барабаны до тех пор, пока у найденных в предыдущем шаге символов
+        // свойство numberSign не станет нулем (что значит что символ в центре).
+        // Тогда и скорость этого символа обнуляется: sprite.vy = drum.speed * 0.
         drums.forEach(function (drum, numberDrum) {
             drum.arrAllSprites.forEach(function (sprite) {
                 sprite.vy = drum.speed * that.winningSymbols[numberDrum].numberSign;
@@ -119,10 +126,13 @@ export const rotation = {
                 if (sprite.y <= prop.btnStart.height + prop.simbols.size / 2) {
                     sprite.y = prop.btnStart.height + prop.listSimbols[numberDrum].length * (prop.simbols.size + init.retreatIcons) + init.retreatIcons;
                 }
+                // если символ ниже центральной точки, то обнулим скорость всего барабана
+                // и тогда скорость спрайтов будет 0 не зависимо от numberSign: sprite.vy = 0 * that.winningSymbols[numberDrum].numberSign
                 if (that.winningSymbols[numberDrum].numberSign === 1) {
                     if (that.winningSymbols[numberDrum].sprite.y < init.centerGreenZone) {
                         drum.speed = 0;
                     }
+                    // то же для символов выше центра и находящихся в центре
                 }
                 else if (that.winningSymbols[numberDrum].numberSign === -1) {
                     if (that.winningSymbols[numberDrum].sprite.y > init.centerGreenZone) {
@@ -134,13 +144,16 @@ export const rotation = {
             });
         });
         this.allDrumsIsCurrectid = this.winningSymbols.every((simbol) => simbol.sprite.vy === 0);
+        // если скорость всех спрайтов равна 0
         if (this.allDrumsIsCurrectid) {
+            //сравниваем названия текстур у всех центральных символов
             const firstSimbol = this.winningSymbols[0].texture;
             if (this.winningSymbols.every(icon => icon.texture === firstSimbol)) {
                 init.endGameMessage.text = 'Вы выиграли!';
             }
             else {
-                init.endGameMessage.text = 'Вам не повезло, попробуйте еще раз';
+                init.endGameMessage.text = `Вам не повезло( 
+Попробуйте еще раз`;
             }
             GlobalVars.state = updatingFunctions.pausePlay;
         }
