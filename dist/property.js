@@ -65,6 +65,7 @@ export const prop = {
         maxSpeed: -6,
         acceleration: 1,
         reversAcceleration: 0.03,
+        speedForCorrected: -2,
     }
 };
 //# sourceMappingURL=property.js.map

@@ -15,6 +15,7 @@ interface iProp {
         // restartTime: number
         maxTimeOfRotate: number
         minTimeOfRotate: number
+        speedForCorrected: number
     }
 }
 
@@ -77,7 +78,7 @@ export const prop: iProp = {
             "images/lens.png",
             "images/monkey.png"
         ],
-        ],
+    ],
     drum: {
         startSpeed: -1,
         minTimeOfRotate: 0,
@@ -85,6 +86,7 @@ export const prop: iProp = {
         maxSpeed: -6,
         acceleration: 1,
         reversAcceleration: 0.03,
+        speedForCorrected: -2,
         // restartTime: 1000,
     }
 };

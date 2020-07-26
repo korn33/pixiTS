@@ -13,12 +13,15 @@ interface iRotation {
     run: (timeOfRotate: number, startingMoment: number) => void
     correctRun: () => void
     testPause: () => void
-    winningSymbolsNumber: number[]
+    winningSymbolsNumber: number[] //
+    getSign: (value:number) => void
+    allDrumsIsCurrectid: boolean
 }
 
 export const rotation: iRotation = {
     currentMoment: 0,
     allDrumsIsStoped: false,
+    allDrumsIsCurrectid: false,
     winningSymbols: [],
     winningSymbolsNumber: [],
 
@@ -80,9 +83,18 @@ export const rotation: iRotation = {
 
         this.allDrumsIsStoped = drums.every(drum => drum.move === 'stop');
         if (this.allDrumsIsStoped) {
+            drums.forEach(drum => drum.speed = prop.drum.speedForCorrected);
 
             GlobalVars.state = rotation.correctRun.bind(rotation);
         }
+    },
+
+    getSign(value:number) {
+        if (value > 0) {
+            return 1;
+        } else if (value < 0) {
+            return -1
+        } else return 0
     },
 
     correctRun() {
@@ -95,7 +107,7 @@ export const rotation: iRotation = {
             drum.arrAllSprites.forEach(function (simbol: any) {
                 arrDistance.push({
                     distance: Math.abs((simbol.y - init.centerGreenZone)),
-                    numberSign: Math.sign((simbol.y - init.centerGreenZone))
+                    numberSign: that.getSign((simbol.y - init.centerGreenZone))
                 })
             });
             // console.log(arrDistance); если -1 то нам надо крутить вниз
@@ -105,6 +117,7 @@ export const rotation: iRotation = {
             };
             // let minDistance = arrDistance[0].distance;
             let indexOfMinDistance = {
+                minDistance: arrDistance[0].distance,
                 index: 0,
                 numberSign: 0
             };
@@ -113,30 +126,12 @@ export const rotation: iRotation = {
                     minDistance.distance = elem.distance;
                     indexOfMinDistance.index = index;
                     indexOfMinDistance.numberSign = elem.numberSign;
+                    indexOfMinDistance.minDistance = elem.distance;
                 }
             });
             // console.log(arrDistance[indexOfMinDistance.index]);
             that.winningSymbolsNumber.push(indexOfMinDistance);
-            // let nearestDistance = Math.abs((drum.arrAllSprites[0].y - init.centerGreenZone));
-            // console.log('indexDrom:', indexDrom, 'nearestDistance', nearestDistance, 'simbol', drum.arrAllSprites[0]._texture.textureCacheIds[0]);
-            // let nearestNumber = drum.arrAllSprites[0].y;
-            // console.log('nearestDistance = drum.arrAllSprites[0].y', nearestDistance);
-            // drum.arrAllSprites.forEach(function (simbol: any, indexSimbol: number) {
-            //     if ((Math.abs((simbol.y - nearestDistance)) < (Math.abs((simbol.y - init.centerGreenZone))))) {
-            //         nearestDistance = Math.abs((simbol.y - nearestDistance));
-            //         nearestNumber = drum.arrAllSprites[0].y;
-            //     }
-            // });
-            //
-            // that.winningSymbols.push(nearestNumber);
-
-            // if ((simbol.y >= init.begineGreenZone) && (simbol.y <= init.begineGreenZone + prop.simbols.size) && (that.winningSymbols.length <= drums.length)) {
-            //     console.log("drums.length: ", drums.length, 'index drum: ', indexDrom, simbol._texture.textureCacheIds[0], simbol.y);
-            //     that.winningSymbols.push(simbol._texture.textureCacheIds[0]);
-            //     // flag = false;
-            // }
         });
-        // });
 
         this.winningSymbolsNumber.forEach(function (simbolNumber: any, index: number) {
             //drums.forEach(function (drum) {
@@ -145,9 +140,11 @@ export const rotation: iRotation = {
                     // that.winningSymbols.push(sprite);
                     that.winningSymbols.push({
                         texture: sprite._texture.textureCacheIds[0],
-                        // sprite: sprite,
-                        numberSign: simbolNumber.numberSign,
-                        indexDrum: index
+                        sprite: sprite,
+                        numberSign: that.getSign((sprite.y - init.centerGreenZone)),
+                        indexDrum: index,
+                        minDistance: simbolNumber.minDistance,
+                        centerY: simbolNumber.minDistance + sprite.y
                     });
                 }
             })
@@ -155,44 +152,33 @@ export const rotation: iRotation = {
         });
 
 
-        // drums.forEach(function (drum, index) {
-        //    drum.arrAllSprites.forEach(function (sprite:any) {
-        //        sprite.y += that.winningSymbols[index].numberSign;
-        //        // console.log(that.winningSymbols[index].sprite.y)
-        //    })
-        // })
+        drums.forEach(function (drum, numberDrum: number) {
 
-        // this.winningSymbols.forEach(function (currentWinningSimbol: any) {
-        //     // if (currentWinningSimbol.numberSign === -1) {
-        //         drums.forEach(function (drum: any) {
-        //             drum.arrAllSprites.forEach(function (simbol: any) {
-        //                 if (currentWinningSimbol.sprite.y < init.centerGreenZone) {
-        //                     simbol.vy = 0.5 * currentWinningSimbol.numberSign;
-        //                     simbol.y += simbol.vy;
-        //                 }
-        //             })
-        //         })
-        //     // }
-        //     // else {
-        //     //     drums.forEach(function (drum: any) {
-        //     //         drum.arrAllSprites.forEach(function (simbol: any) {
-        //     //             if (currentWinningSimbol.sprite.y > init.centerGreenZone) {
-        //     //                 simbol.vy = -0.5;
-        //     //                 simbol.y += simbol.vy;
-        //     //             }
-        //     //         })
-        //     //     })
-        //     // }
+            drum.arrAllSprites.forEach(function (sprite: any) {
+                // console.log(numberDrum, sprite);
+                sprite.vy = drum.speed * that.winningSymbols[numberDrum].numberSign;
+                sprite.y += sprite.vy;
+                if (sprite.y <= prop.btnStart.height + prop.simbols.size / 2) {
+                    sprite.y = prop.btnStart.height + prop.listSimbols[numberDrum].length * (prop.simbols.size + init.retreatIcons) + init.retreatIcons;
+                }
+                if (that.winningSymbols[numberDrum].numberSign === 1) {
+                    if (that.winningSymbols[numberDrum].sprite.y < init.centerGreenZone) {
+                        drum.speed = 0;
+                    }
+                } else if (that.winningSymbols[numberDrum].numberSign === -1) {
+                    if (that.winningSymbols[numberDrum].sprite.y > init.centerGreenZone) {
+                        drum.speed = 0;
+                    }
+                } else drum.speed = 0;
+            })
+        });
+
+        // this.winningSymbols.forEach(simbol=> {
+        //     this.allDrumsIsCurrectid = simbol.sprite.y === 0
         // });
 
-        // this.winningSymbols.forEach(function (currentWinningSimbol: any) {
-        //     if (currentWinningSimbol.sprite.y === init.centerGreenZone)  {
-        //         console.log(that.winningSymbols);
-        //         GlobalVars.state = rotation.testPause;
-        //     }
-        // });
-
-        if (this.winningSymbols.length >= drums.length) {
+        this.allDrumsIsCurrectid = this.winningSymbols.every((simbol:any) => simbol.sprite.vy ===0);
+        if (this.allDrumsIsCurrectid) {
             console.log(that.winningSymbols);
             GlobalVars.state = rotation.testPause;
         }
